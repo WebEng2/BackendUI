@@ -1,4 +1,4 @@
-import { apiGet_randomBook, apiGet_searchBookISBN } from './apiCalls.js';
+import { apiGet_randomBook, apiGet_searchBookISBN, apiGet_searchBookID} from './apiCalls.js';
 
 class BookViewContent {
     constructor() {
@@ -50,6 +50,24 @@ class BookViewContent {
                     resolve(true);
                 } else {
                     reject(new Error('Kein Buch mit dieser ISBN gefunden'));
+                }
+            });
+        });
+    }
+
+    /**
+     * Setzt den Buchinhalt basierend auf einer ID
+     * @param {string} id
+     * @returns {Promise} Promise, das resolved, wenn der Buchinhalt gesetzt wurde
+     */
+    async setSearchedIdBookContent(id) {
+        return new Promise((resolve, reject) => {
+            apiGet_searchBookID(id, (data) => {
+                if (data) {
+                    this.setCurrentBookContent(data);
+                    resolve(true);
+                } else {
+                    reject(new Error('Kein Buch mit dieser ID gefunden'));
                 }
             });
         });

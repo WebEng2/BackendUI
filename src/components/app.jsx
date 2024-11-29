@@ -22,7 +22,12 @@ import {
   ListInput,
   ListButton,
   BlockFooter,
-  BlockHeader
+  BlockHeader,
+  CardHeader,
+  CardContent,
+  Card,
+  CardFooter,
+  Button,
 } from 'framework7-react';
 import BookViewContent from '../js/bookViewContent';
 import { apiGet_searchBookList } from '../js/apiCalls.js';
@@ -109,8 +114,8 @@ const MyApp = () => {
               <Link popupClose>Close</Link>
             </NavRight>
           </Navbar>
-          <Block>
-            <p>Search a book via name or ISBN here.</p>
+          <Card >
+            <CardContent>Search a book via name or ISBN here.</CardContent>
             <List noHairlinesMd>
               <ListInput
                 label="Name or ISBN"
@@ -123,24 +128,30 @@ const MyApp = () => {
                   searchBookList(lastInput);
                 }}
               />
-              <ListButton onClick={() => searchBookList(searchValue)}>Search</ListButton>
+              <ListButton  onClick={() => searchBookList(searchValue)}>Search</ListButton>
             </List>
-          </Block>
+          </Card>
           <BlockHeader>Search Results</BlockHeader>
-          <Block className="search-results-block">
-            <List>
+          <Block style = {{ overflowY: 'auto', maxHeight: '260px'}}>
+            
               {foundBooks.map((book, index) => (
-                // Display Title and ISBN on a clickable list element and set the isbn as Variable if clicked
-                <ListItem key={index} title={book.title} subtitle={"ISBN: " + book.isbn} onClick={() => {
-                  console.log('clicked on:', book.isbn);
-                  BookViewContent.setSearchedISBNBookContent(book.isbn);
-                  // close popup
-                  f7.popup.close();
-                  // open book view page
-                  f7.views.main.router.navigate('/book-view/');
-                }} />
+                
+                <Button tonal fill style = {{marginBottom: "10px", height: "80px", display: "block"}} onClick={ () => {
+                    console.log('clicked on:', book.id);
+                    BookViewContent.setSearchedIdBookContent(book.id);
+                    // close popup
+                    f7.popup.close();
+                    // open book view page
+                    f7.views.main.router.navigate('/book-view/');
+                  }}>
+                      <div style={{ display: "flex", paddingBottom: 0}} >
+                        {book.title.length > 50 ? book.title.substring(0, 50) + '...' : book.title}
+                      </div>
+                      <div style={{ fontSize: '0.7em', color: 'gray', display: "flex"}}>
+                        ISBN: {book.isbn}
+                      </div>
+                </Button>
               ))}
-            </List>
           </Block>
         </Page>
       </View>
@@ -148,4 +159,12 @@ const MyApp = () => {
     </App>
   )
 }
+// Add this CSS to make the block scrollable
+const styles = {
+  '.scrollable-block': {
+    maxHeight: '400px',
+    overflowY: 'auto',
+  },
+};
+
 export default MyApp;

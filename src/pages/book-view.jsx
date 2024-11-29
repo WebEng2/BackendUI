@@ -175,113 +175,70 @@ function BookView() {
             </Block>
           </CardHeader>
           
-          
-          
-          
-            {/*
-authors: "Isabel Allende"
-
-averageRating: 0
-
-categories: "Juvenile Nonfiction"
-
-coverUrls: {small: "https://covers.openlibrary.org/b/id/7269965-S.jpg", medium: "https://covers.openlibrary.org/b/id/7269965-M.jpg", large: "https://covers.openlibrary.org/b/id/7269965-L.jpg"}
-
-description: "\"Narra la prodigiosa historia de Aurora del Valle, que a los 30 anos decide ir en busca de su brumoso pasado familiar tras haber crecido e…"
-
-firstSentence: "Vine al mundo un martes de otono de 1880, bajo el techo de mis abuelos maternos, en San Francisco."
-
-identifiers: {goodreads: ["2189741"], depósito_legal: ["M341752000"], librarything: ["18887"], isbn_10: ["8401341558"], isbn_13: ["9788401341557"], …}
-
-infoLink: "http://books.google.de/books?id=vra2bwAACAAJ&dq=isbn:8401341558&hl=&source=gbs_api"
-
-isbn: "8401341558"
-
-language: "es"
-
-pageCount: 343
-
-previewLink: "http://books.google.de/books?id=vra2bwAACAAJ&dq=isbn:8401341558&hl=&cd=1&source=gbs_api"
-
-printType: "BOOK"
-
-publishedDate: "2000"
-
-publisherName: "Plaza & Janes Editores, S.A."
-
-ratingsCount: 0
-
-subjects: ["Families", "Fiction", "History", "Polish language materials", "Social life and customs", "Family", "Man-woman relationships", "Amnesia", "Chilean Historical fiction", "Libros en letra grande", …] (42)
-
-title: "Retrato en sepia"
-
-weight: "1.2 pounds"
-
-            */}
-            {bookContent.isbn && (
-              <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-                <Block>
-                  <div>ISBN</div>
-                  <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.isbn}</div>
-                </Block>
+    
+          {bookContent.isbn && (
+            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
+              <Block>
+                <div>ISBN</div>
+                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.isbn}</div>
+              </Block>
+              <br/>
+            </Block>
+          )}
+          {bookContent.description && (
+            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
+              <Block>
+                <div>Description</div>
+                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.description}</div>
+              </Block>
+              <br/>
+            </Block>
+          )}
+          {bookContent.publishDate && (
+            <Block  style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
+              <Block>
+                <div>Published</div>
+                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.publishDate}</div>
+              </Block>
+              <br/>
+            </Block>
+          )}
+          {bookContent.publisher && (
+            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
+              <Block>
+                <div>Publisher</div>
+                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.publisher}</div>
+              </Block>
+              <br/>
+            </Block>
+          )}
+          {bookContent.pageCount > 0 && (
+            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
+              <Block >
+                <div>Pages</div>
+                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.pageCount}</div>
+              </Block>
+              <br/>
+            </Block>
+          )}
+          {bookContent.language && (
+            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
+              <Block>
+                <div>Language</div>
+                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.language}</div>
+              </Block>
+              <br/>
+            </Block>
+          )}
+          {isCardExpanded && (
+            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
+                  <Button fill round large cardClose>
+                  Close
+                </Button>
                 <br/>
-              </Block>
-            )}
-            {bookContent.description && (
-              <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-                <Block>
-                  <div>Description</div>
-                  <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.description}</div>
-                </Block>
-                <br/>
-              </Block>
-            )}
-            {bookContent.publishDate && (
-              <Block  style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-                <Block>
-                  <div>Published</div>
-                  <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.publishDate}</div>
-                </Block>
-                <br/>
-              </Block>
-            )}
-            {bookContent.publisher && (
-              <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-                <Block>
-                  <div>Publisher</div>
-                  <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.publisher}</div>
-                </Block>
-                <br/>
-              </Block>
-            )}
-            {bookContent.pageCount > 0 && (
-              <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-                <Block >
-                  <div>Pages</div>
-                  <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.pageCount}</div>
-                </Block>
-                <br/>
-              </Block>
-            )}
-            {bookContent.language && (
-              <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-                <Block>
-                  <div>Language</div>
-                  <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.language}</div>
-                </Block>
-                <br/>
-              </Block>
-            )}
-            
-            {isCardExpanded && (
-              <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-                    <Button fill round large cardClose>
-                    Close
-                  </Button>
-                  <br/>
-              </Block>
-              
-            )}
+            </Block>
+          )}
+
         </CardContent>
       </Card>
       ) : (
