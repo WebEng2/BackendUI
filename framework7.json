@@ -1,0 +1,18 @@
+{
+  "cwd": "/Users/timogrethel/Documents/Programmieren/WebEng2/BackendUI/BackendUI",
+  "type": [
+    "web"
+  ],
+  "name": "OpenReadMap",
+  "framework": "react",
+  "template": "single-view",
+  "bundler": "vite",
+  "cssPreProcessor": "scss",
+  "theming": {
+    "customColor": true,
+    "color": "#00eadf",
+    "darkMode": true,
+    "iconFonts": true
+  },
+  "customBuild": false
+}
