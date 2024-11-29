@@ -37,7 +37,6 @@ const MyApp = () => {
   const [foundBooks, setFoundBooks] = useState([]);
 
   const searchBookList = (search) => {
-    console.log("searching for: " + search);
     apiGet_searchBookList(search, (data) => {
         if (data && data.content) {
             setFoundBooks(data.content);

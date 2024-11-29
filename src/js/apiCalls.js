@@ -1,13 +1,10 @@
 const apiGet_randomBook = async (callbackFunction) => {
     try {
-        //get api settings from api-settings.json
         const response = await fetch('/api-settings.json');
         const settings = await response.json();
         const apiSettings = settings["openReadMapAPI"];
         const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/books/randominfo`;
-        console.log('Calling API:', callURL);
         
-        //fetch data from API
         const result = await fetch(callURL, {
             method: 'GET',
             headers: {
@@ -21,7 +18,11 @@ const apiGet_randomBook = async (callbackFunction) => {
         }
         
         const data = await result.json();
-        callbackFunction(data);
+        if (data) {
+            callbackFunction(data);
+        } else {
+            throw new Error('No data received');
+        }
     } catch (error) {
         console.error('Error fetching random book:', error);
         callbackFunction(null);

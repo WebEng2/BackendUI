@@ -1,26 +1,23 @@
-
 import { apiGet_randomBook, apiGet_searchBookISBN } from './apiCalls.js';
 
 class BookViewContent {
     constructor() {
-      if (!BookViewContent.instance) {
-        this.state = {};
-        this.currentBookContent = {};
-        this.contentChangeListeners = [];
-        BookViewContent.instance = this;
-      }
-  
-      return BookViewContent.instance;
+        if (!BookViewContent.instance) {
+            this._state = {};
+            this._currentBookContent = {};
+            this._contentChangeListeners = null;
+            BookViewContent.instance = this;
+        }
+        return BookViewContent.instance;
     }
 
     addContentChangeListener(listener) {
-        this.contentChangeListeners.push(listener);
+        this._contentChangeListeners = listener;
     }
 
     notifyContentChangeListeners() {
-        this.contentChangeListeners.forEach(listener => {
-            listener();
-        });
+        this._contentChangeListeners();
+        console.log(this._currentBookContent);
     }
 
     /**
@@ -28,7 +25,7 @@ class BookViewContent {
      * @returns {Object} the current book content
      */
     getCurrentBookContent() {
-        return this.currentBookContent;
+        return this._currentBookContent;
     }
 
     /**
@@ -36,7 +33,26 @@ class BookViewContent {
      * @param {Object} bookContent the book content to set
      */
     setCurrentBookContent(bookContent) {
-        this.currentBookContent = bookContent;
+        this._currentBookContent = { ...bookContent };  // Kopie erstellen
+        this.notifyContentChangeListeners();
+    }
+
+    /**
+     * Setzt den Buchinhalt basierend auf einer ISBN
+     * @param {string} isbn Die ISBN des Buchs
+     * @returns {Promise} Promise, das resolved, wenn der Buchinhalt gesetzt wurde
+     */
+    async setSearchedISBNBookContent(isbn) {
+        return new Promise((resolve, reject) => {
+            apiGet_searchBookISBN(isbn, (data) => {
+                if (data) {
+                    this.setCurrentBookContent(data);
+                    resolve(true);
+                } else {
+                    reject(new Error('Kein Buch mit dieser ISBN gefunden'));
+                }
+            });
+        });
     }
 
     /**
@@ -45,38 +61,17 @@ class BookViewContent {
     async setRandomBookContent() {
         return new Promise((resolve, reject) => {
             apiGet_randomBook((data) => {
-                this.setCurrentBookContent(data);
-                this.notifyContentChangeListeners();
-                resolve(true);
+                if (data) {
+                    this.setCurrentBookContent(data);
+                    resolve(true);
+                } else {
+                    reject(new Error('No data received'));
+                }
             });
         });
     }
+}
 
-    /**
-     * Try to get a book content from the API with the given search
-     * @param {string} search The search to use
-     */
-    async setSearchedISBNBookContent(searchISBN) {
-        return new Promise((resolve, reject) => {
-            apiGet_searchBookISBN(searchISBN, (data) => {
-                this.setCurrentBookContent(data);
-                this.notifyContentChangeListeners();
-                resolve(true);
-            });
-        });
-    }
-
-
-    getState(key) {
-      return this.state[key];
-    }
-  
-    setState(key, value) {
-      this.state[key] = value;
-    }
-  }
-  
-  const instance = new BookViewContent();
-  Object.freeze(instance);
-  
-  export default instance;
+// Singleton-Instanz erstellen
+const instance = new BookViewContent();
+export default instance;  // Kein Object.freeze() mehr
