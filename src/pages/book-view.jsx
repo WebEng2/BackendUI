@@ -18,7 +18,7 @@ import { is } from 'dom7';
 
 function BookView() {
   const [bookContent, setBookContent] = useState(BookViewContent.getCurrentBookContent());
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [averageColor, setAverageColor] = useState('#f0f0f0');
   const [isCardExpanded, setIsCardExpanded] = useState(false);
   const imageRef = useRef(null);
