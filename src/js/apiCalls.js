@@ -58,13 +58,13 @@ const apiGet_searchBookList = async (search, callbackFunction, page = 0, pageSiz
     }
 }
 
-const apiGet_searchBookISBN = async (isbn, callbackFunction) => {
+const apiGet_searchBookISBN = async (isbn, callbackFunction, results=10) => {
     try {
         //get api settings from api-settings.json
         const response = await fetch('/api-settings.json');
         const settings = await response.json();
         const apiSettings = settings["openReadMapAPI"];
-        const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/books/searchIsbn?isbn=${isbn}`;
+        const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/books/searchIsbn?isbn=${isbn}&size=${results}`;
         console.log('Calling API:', callURL);
         
         //fetch data from API
@@ -118,5 +118,35 @@ const apiGet_searchBookID = async (id, callbackFunction) => {
     }
 }
 
+const apiGet_searchLibrariesForISBN = async (isbn, callbackFunction) => {
+    try {
+        //get api settings from api-settings.json
+        const response = await fetch('/api-settings.json');
+        const settings = await response.json();
+        const apiSettings = settings["openReadMapAPI"];
+        const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/libraries/searchHasISBN?isbn=${isbn}`;
+        console.log('Calling API:', callURL);
+        
+        //fetch data from API
+        const result = await fetch(callURL, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (!result.ok) {
+            throw new Error(`HTTP error! status: ${result.status}`);
+        }
+        
+        const data = await result.json();
+        callbackFunction(data);
+    } catch (error) {
+        console.error('Error searching libraries:', error);
+        callbackFunction(null);
+    }
+}
 
-export { apiGet_randomBook, apiGet_searchBookList, apiGet_searchBookISBN, apiGet_searchBookID };
+
+export { apiGet_randomBook, apiGet_searchBookList, apiGet_searchBookISBN, apiGet_searchBookID, apiGet_searchLibrariesForISBN };

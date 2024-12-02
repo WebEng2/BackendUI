@@ -14,7 +14,7 @@ import {
   CardFooter
 } from 'framework7-react';
 import BookViewContent from '../js/bookViewContent';
-import { is } from 'dom7';
+import { apiGet_searchLibrariesForISBN } from '../js/apiCalls';
 
 function BookView() {
   const [bookContent, setBookContent] = useState(BookViewContent.getCurrentBookContent());
@@ -22,6 +22,21 @@ function BookView() {
   const [averageColor, setAverageColor] = useState('#f0f0f0');
   const [isCardExpanded, setIsCardExpanded] = useState(false);
   const imageRef = useRef(null);
+
+  const [library, setLibrary] = useState([]);
+
+  useEffect(() => {
+    if (bookContent && bookContent.isbn) {
+      apiGet_searchLibrariesForISBN(bookContent.isbn, (data) => {
+        if (data) {
+          setLibrary(data.content);
+        } else {
+          setLibrary([]);
+        }
+      });
+    }
+  }, [bookContent]);
+
 
   const getAverageColorFallback = () => {
     const colorPalettes = {
@@ -174,8 +189,7 @@ function BookView() {
               </div>
             </Block>
           </CardHeader>
-          
-    
+
           {bookContent.isbn && (
             <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
               <Block>
@@ -226,6 +240,19 @@ function BookView() {
               <Block>
                 <div>Language</div>
                 <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.language}</div>
+              </Block>
+              <br/>
+            </Block>
+          )}
+          {library && library.length > 0 && (
+            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
+              <Block>
+                <div>Libraries</div>
+                <div style={{fontSize: '0.8em', color: 'gray'}}>
+                  {library.map((lib, index) => (
+                    <div key={index}>{lib.name} - {lib.distance}km</div>
+                  ))}
+                </div>
               </Block>
               <br/>
             </Block>
