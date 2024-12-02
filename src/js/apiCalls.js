@@ -4,7 +4,7 @@ const apiGet_randomBook = async (callbackFunction) => {
         const settings = await response.json();
         const apiSettings = settings["openReadMapAPI"];
         const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/books/randominfo`;
-        
+
         const result = await fetch(callURL, {
             method: 'GET',
             headers: {
@@ -12,11 +12,11 @@ const apiGet_randomBook = async (callbackFunction) => {
                 'Accept': 'application/json'
             }
         });
-        
+
         if (!result.ok) {
             throw new Error(`HTTP error! status: ${result.status}`);
         }
-        
+
         const data = await result.json();
         if (data) {
             callbackFunction(data);
@@ -35,7 +35,7 @@ const apiGet_searchBookList = async (search, callbackFunction, page = 0, pageSiz
         const settings = await response.json();
         const apiSettings = settings["openReadMapAPI"];
         const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/books/search?text=${encodeURIComponent(search)}&page=${page}&size=${pageSize}`;
-        
+
         const result = await fetch(callURL, {
             method: 'GET',
             headers: {
@@ -44,12 +44,12 @@ const apiGet_searchBookList = async (search, callbackFunction, page = 0, pageSiz
             },
             mode: 'cors' // Explizit CORS-Modus aktivieren
         });
-        
+
         if (!result.ok) {
             callbackFunction([]);
             return;
         }
-        
+
         const data = await result.json();
         callbackFunction(data);
     } catch (error) {
@@ -58,15 +58,15 @@ const apiGet_searchBookList = async (search, callbackFunction, page = 0, pageSiz
     }
 }
 
-const apiGet_searchBookISBN = async (isbn, callbackFunction, results=10) => {
+const apiGet_searchBookISBN = async (isbn, callbackFunction) => {
     try {
         //get api settings from api-settings.json
         const response = await fetch('/api-settings.json');
         const settings = await response.json();
         const apiSettings = settings["openReadMapAPI"];
-        const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/books/searchIsbn?isbn=${isbn}&size=${results}`;
+        const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/books/searchIsbn?isbn=${isbn}`;
         console.log('Calling API:', callURL);
-        
+
         //fetch data from API
         const result = await fetch(callURL, {
             method: 'GET',
@@ -75,11 +75,11 @@ const apiGet_searchBookISBN = async (isbn, callbackFunction, results=10) => {
                 'Accept': 'application/json'
             }
         });
-        
+
         if (!result.ok) {
             throw new Error(`HTTP error! status: ${result.status}`);
         }
-        
+
         const data = await result.json();
         callbackFunction(data);
     } catch (error) {
@@ -96,7 +96,7 @@ const apiGet_searchBookID = async (id, callbackFunction) => {
         const apiSettings = settings["openReadMapAPI"];
         const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/books/${id}/info`;
         console.log('Calling API:', callURL);
-        
+
         //fetch data from API
         const result = await fetch(callURL, {
             method: 'GET',
@@ -105,11 +105,11 @@ const apiGet_searchBookID = async (id, callbackFunction) => {
                 'Accept': 'application/json'
             }
         });
-        
+
         if (!result.ok) {
             throw new Error(`HTTP error! status: ${result.status}`);
         }
-        
+
         const data = await result.json();
         callbackFunction(data);
     } catch (error) {
@@ -118,15 +118,15 @@ const apiGet_searchBookID = async (id, callbackFunction) => {
     }
 }
 
-const apiGet_searchLibrariesForISBN = async (isbn, callbackFunction) => {
+const apiGet_searchLibrariesForISBN = async (isbn, callbackFunction, results = 5) => {
     try {
         //get api settings from api-settings.json
         const response = await fetch('/api-settings.json');
         const settings = await response.json();
         const apiSettings = settings["openReadMapAPI"];
-        const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/libraries/searchHasISBN?isbn=${isbn}`;
+        const callURL = `http://${apiSettings["host"]}:${apiSettings["port"]}/api/libraries/searchHasISBN?isbn=${isbn}&size=${results}`;
         console.log('Calling API:', callURL);
-        
+
         //fetch data from API
         const result = await fetch(callURL, {
             method: 'GET',
@@ -135,11 +135,11 @@ const apiGet_searchLibrariesForISBN = async (isbn, callbackFunction) => {
                 'Accept': 'application/json'
             }
         });
-        
+
         if (!result.ok) {
             throw new Error(`HTTP error! status: ${result.status}`);
         }
-        
+
         const data = await result.json();
         callbackFunction(data);
     } catch (error) {

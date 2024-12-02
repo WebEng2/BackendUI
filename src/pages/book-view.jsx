@@ -52,49 +52,49 @@ function BookView() {
   useEffect(() => {
     const img = new Image();
     img.crossOrigin = 'Anonymous';
-    
+
     img.onload = () => {
       try {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = img.width;
         canvas.height = img.height;
-        
+
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        
+
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const data = imageData.data;
-        
+
         let r = 0, g = 0, b = 0;
         const pixelCount = data.length / 4;
-        
+
         for (let i = 0; i < data.length; i += 4) {
           r += data[i];
           g += data[i + 1];
           b += data[i + 2];
         }
-        
+
         r = Math.floor(r / pixelCount);
         g = Math.floor(g / pixelCount);
         b = Math.floor(b / pixelCount);
-        
+
         setAverageColor(`rgb(${r},${g},${b})`);
       } catch (error) {
         console.warn('Could not extract color, using fallback', error);
         setAverageColor(getAverageColorFallback());
       }
     };
-    
+
     img.onerror = () => {
       console.warn('Image load failed, using fallback color');
       setAverageColor(getAverageColorFallback());
     };
-    
-    const coverImage = bookContent?.coverUrls?.large || 
-                       bookContent?.coverUrls?.medium || 
-                       bookContent?.coverUrls?.small || 
-                       '/images/default_cover.png';
-    
+
+    const coverImage = bookContent?.coverUrls?.large ||
+      bookContent?.coverUrls?.medium ||
+      bookContent?.coverUrls?.small ||
+      '/images/default_cover.png';
+
     img.src = coverImage;
   }, [bookContent]);
 
@@ -113,10 +113,10 @@ function BookView() {
     try {
       return bookContent.coverUrls
         ? (bookContent.coverUrls.large ||
-           bookContent.coverUrls.medium ||
-           bookContent.coverUrls.small ||
-           bookContent.coverUrls[0] ||
-           fallbackImage)
+          bookContent.coverUrls.medium ||
+          bookContent.coverUrls.small ||
+          bookContent.coverUrls[0] ||
+          fallbackImage)
         : fallbackImage;
     } catch (error) {
       console.error('Error loading book cover:', error);
@@ -134,162 +134,162 @@ function BookView() {
       <Toolbar bottom>
         <Link onClick={() => f7.views.main.router.navigate('/about/')}>About</Link>
       </Toolbar>
-      
+
       <BlockTitle>
-        {bookContent ? 
-          <>{bookContent.title ? bookContent.title : 'no book title available'}</> 
+        {bookContent ?
+          <>{bookContent.title ? bookContent.title : 'no book title available'}</>
           : 'book is loading'}
       </BlockTitle>
-      
-      {bookContent ? (
-        <Card 
-        expandable 
-        onCardOpen={() => handleCardToggle(true)}
-        onCardClose={() => handleCardToggle(false)}
-      >
-        <CardContent padding={false}>
-          <div 
-            style={{ 
-              backgroundColor: averageColor, 
-              display: 'flex', 
-              justifyContent: 'center', 
-              alignItems: 'center' 
-            }}
-          >
-            <div 
-              style={{
-                backgroundImage: `url(${getCoverImage()})`,
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-                backgroundSize:'contain',
-                maxWidth: '100%',
-                maxHeight: isCardExpanded ? '400px' : '220px',
-                width: '100%',
-                height: isCardExpanded ? '400px' : '220px',
-                transition: 'all 0.3s ease-in-out'
-              }}
-            />
-          </div>
-          
-          <Link
-            cardClose
-            color="white"
-            className="card-opened-fade-in"
-            style={{ position: 'absolute', right: '15px', top: '15px' }}
-            iconF7="xmark_circle_fill"
-          />
-          
-          <CardHeader style={{ paddingTop: 0, marginTop:10}}>
-            <Block>
-              <div>
-                {bookContent.title ? <>{bookContent.title}</> : <>no title available</>}
-              </div>
-              <div style={{ fontSize: '0.7em', color: 'gray' }}>
-                {bookContent.authors}
-              </div>
-            </Block>
-          </CardHeader>
 
-          {bookContent.isbn && (
-            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
+      {bookContent ? (
+        <Card
+          expandable
+          onCardOpen={() => handleCardToggle(true)}
+          onCardClose={() => handleCardToggle(false)}
+        >
+          <CardContent padding={false}>
+            <div
+              style={{
+                backgroundColor: averageColor,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <div
+                style={{
+                  backgroundImage: `url(${getCoverImage()})`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                  backgroundSize: 'contain',
+                  maxWidth: '100%',
+                  maxHeight: isCardExpanded ? '400px' : '220px',
+                  width: '100%',
+                  height: isCardExpanded ? '400px' : '220px',
+                  transition: 'all 0.3s ease-in-out'
+                }}
+              />
+            </div>
+
+            <Link
+              cardClose
+              color="white"
+              className="card-opened-fade-in"
+              style={{ position: 'absolute', right: '15px', top: '15px' }}
+              iconF7="xmark_circle_fill"
+            />
+
+            <CardHeader style={{ paddingTop: 0, marginTop: 10 }}>
               <Block>
-                <div>ISBN</div>
-                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.isbn}</div>
-              </Block>
-              <br/>
-            </Block>
-          )}
-          {bookContent.description && (
-            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-              <Block>
-                <div>Description</div>
-                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.description}</div>
-              </Block>
-              <br/>
-            </Block>
-          )}
-          {bookContent.publishDate && (
-            <Block  style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-              <Block>
-                <div>Published</div>
-                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.publishDate}</div>
-              </Block>
-              <br/>
-            </Block>
-          )}
-          {bookContent.publisher && (
-            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-              <Block>
-                <div>Publisher</div>
-                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.publisher}</div>
-              </Block>
-              <br/>
-            </Block>
-          )}
-          {bookContent.pageCount > 0 && (
-            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-              <Block >
-                <div>Pages</div>
-                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.pageCount}</div>
-              </Block>
-              <br/>
-            </Block>
-          )}
-          {bookContent.language && (
-            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-              <Block>
-                <div>Language</div>
-                <div style={{fontSize: '0.8em', color: 'gray'}}>{bookContent.language}</div>
-              </Block>
-              <br/>
-            </Block>
-          )}
-          {library && library.length > 0 && (
-            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-              <Block>
-                <div>Libraries</div>
-                <div style={{fontSize: '0.8em', color: 'gray'}}>
-                  {library.map((lib, index) => (
-                    <div key={index}>{lib.name} - {lib.distance}km</div>
-                  ))}
+                <div>
+                  {bookContent.title ? <>{bookContent.title}</> : <>no title available</>}
+                </div>
+                <div style={{ fontSize: '0.7em', color: 'gray' }}>
+                  {bookContent.authors}
                 </div>
               </Block>
-              <br/>
-            </Block>
-          )}
-          {isCardExpanded && (
-            <Block style={{fontSize :'1.1em', paddingBottom : '5' , marginBottom : '15'}}>
-                  <Button fill round large cardClose>
+            </CardHeader>
+
+            {bookContent.isbn && (
+              <Block style={{ fontSize: '1.1em', paddingBottom: '5', marginBottom: '15' }}>
+                <Block>
+                  <div>ISBN</div>
+                  <div style={{ fontSize: '0.8em', color: 'gray' }}>{bookContent.isbn}</div>
+                </Block>
+                <br />
+              </Block>
+            )}
+            {bookContent.description && (
+              <Block style={{ fontSize: '1.1em', paddingBottom: '5', marginBottom: '15' }}>
+                <Block>
+                  <div>Description</div>
+                  <div style={{ fontSize: '0.8em', color: 'gray' }}>{bookContent.description}</div>
+                </Block>
+                <br />
+              </Block>
+            )}
+            {bookContent.publishDate && (
+              <Block style={{ fontSize: '1.1em', paddingBottom: '5', marginBottom: '15' }}>
+                <Block>
+                  <div>Published</div>
+                  <div style={{ fontSize: '0.8em', color: 'gray' }}>{bookContent.publishDate}</div>
+                </Block>
+                <br />
+              </Block>
+            )}
+            {bookContent.publisher && (
+              <Block style={{ fontSize: '1.1em', paddingBottom: '5', marginBottom: '15' }}>
+                <Block>
+                  <div>Publisher</div>
+                  <div style={{ fontSize: '0.8em', color: 'gray' }}>{bookContent.publisher}</div>
+                </Block>
+                <br />
+              </Block>
+            )}
+            {bookContent.pageCount > 0 && (
+              <Block style={{ fontSize: '1.1em', paddingBottom: '5', marginBottom: '15' }}>
+                <Block >
+                  <div>Pages</div>
+                  <div style={{ fontSize: '0.8em', color: 'gray' }}>{bookContent.pageCount}</div>
+                </Block>
+                <br />
+              </Block>
+            )}
+            {bookContent.language && (
+              <Block style={{ fontSize: '1.1em', paddingBottom: '5', marginBottom: '15' }}>
+                <Block>
+                  <div>Language</div>
+                  <div style={{ fontSize: '0.8em', color: 'gray' }}>{bookContent.language}</div>
+                </Block>
+                <br />
+              </Block>
+            )}
+            {library && library.length > 0 && (
+              <Block style={{ fontSize: '1.1em', paddingBottom: '5', marginBottom: '15' }}>
+                <Block>
+                  <div>Libraries</div>
+                  <div style={{ fontSize: '0.8em', color: 'gray' }}>
+                    {library.map((lib, index) => (
+                      <div key={index}>{lib.name} - {parseFloat(lib.distance.toFixed(1))}km</div>
+                    ))}
+                  </div>
+                </Block>
+                <br />
+              </Block>
+            )}
+            {isCardExpanded && (
+              <Block style={{ fontSize: '1.1em', paddingBottom: '5', marginBottom: '15' }}>
+                <Button fill round large cardClose>
                   Close
                 </Button>
-                <br/>
-            </Block>
-          )}
+                <br />
+              </Block>
+            )}
 
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
       ) : (
         <p>book is loading</p>
       )}
-      
+
       <BlockTitle>More</BlockTitle>
       <Block className='grid grid-cols-2 grid-gap'>
-        <Button 
-          fill 
-          onClick={getRandomBook} 
-          preloader={true} 
-          loading={loading} 
-          preloaderColor='black' 
+        <Button
+          fill
+          onClick={getRandomBook}
+          preloader={true}
+          loading={loading}
+          preloaderColor='black'
           tonal={loading}
         >
           get random book
         </Button>
-        <Button 
-          fill 
-          popupOpen="#book-search" 
-          preloader={true} 
-          loading={loading} 
-          preloaderColor='black' 
+        <Button
+          fill
+          popupOpen="#book-search"
+          preloader={true}
+          loading={loading}
+          preloaderColor='black'
           tonal={loading}
         >
           search a book
