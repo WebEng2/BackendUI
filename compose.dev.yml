@@ -1,0 +1,12 @@
+---
+services:
+  # Main Services
+  openreadmapui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      tags:
+        - "openreadmapui:latest"
+    hostname: openreadmapui
+    ports:
+      - '${OPENREADMAPUI_PORT}:5173'

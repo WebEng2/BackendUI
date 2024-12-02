@@ -1,0 +1,8 @@
+---
+services:
+  # Main Services
+  openreadmapui:
+    image: ghcr.io/webeng2/backendui:main
+    hostname: openreadmapui
+    ports:
+      - '${OPENREADMAPUI_PORT}:5173'
